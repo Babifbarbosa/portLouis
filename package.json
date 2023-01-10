@@ -1,0 +1,26 @@
+{
+  "name": "portlouis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Babifbarbosa/portLouis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Babifbarbosa/portLouis/issues"
+  },
+  "homepage": "https://github.com/Babifbarbosa/portLouis#readme",
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "puppeteer": "^19.4.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  }
+}
