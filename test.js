@@ -5,13 +5,13 @@ let browser, page;
 
 beforeAll(async () => {
   browser = await puppeteer.launch({
-    // headless: false,
+    //headless: false,
   });
   page = await browser.newPage();
 });
 
 afterAll(async () => {
-  //await browser.close();
+  // await browser.close();
 });
 
 test("Acessar pagina de login do github", async () => {
@@ -31,35 +31,32 @@ test("Acessar pagina de login do github", async () => {
   console.log("Autenticado");
 });
 
-//Validar o nome do usuário
+// //Validar o nome do usuário
 test("Verificacao de nome de usuario", async () => {
-  // await page.click('[class="Header-link"]');
-  const name = document.querySelector(
-    "body > div.logged-in.env-production.page-responsive > div.position-relative.js-header-wrapper > header > div.Header-item.position-relative.mr-0.d-none.d-md-flex > details > details-menu > a:nth-child(3)"
+  const name = await page.$eval(
+    '[class="css-truncate css-truncate-target ml-1"]',
+    (el) => el.innerHTML
   );
-  await page.click("name");
-  await expect(() => {
-    url.toBe("https://github.com/Babifbarbosa");
-  }).toThrow();
-
-  // const url = page.url();
-  // await expect(url).toBe("https://github.com/Babifbarbosa");
-  // console.log("Usuario esta correto");
-
-  // const name = await page.$eval(
-  //   "body > div.logged-in.env-production.page-responsive.full-width > div.position-relative.js-header-wrapper > header > div.Header-item.position-relative.mr-0.d-none.d-md-flex > details > details-menu > div.header-nav-current-user.css-truncate > a > strong",
-  //   (el) => el.textContent
-  // );
-  // expect(name).toBe("Babifbarbosa");
+  expect(name).toBe(process.env.GITHUBUSER);
 });
 
 // Navegar até a aba "Repositories"
 test("Navegar pelos repositorios", async () => {
   await page.goto("https://www.github.com/Babifbarbosa/?tab=repositories");
-  // await page.click(
-  //   "#user-repositories-list > ul > li:nth-child(3) > div.col-10.col-lg-9.d-inline-block > div.d-inline-block.mb-1 > h3 > a"
-  // );
+  const repositoriesNumber = await page.$eval(
+    '[class="Counter"]',
+    (el) => el.innerHTML
+  );
+  const randomicNumber = (repositoriesNumber) => {
+    return Math.floor(Math.random() * repositoriesNumber + 1);
+  };
+  const choice = await page.$eval(
+    "#user-repositories-list > ul > li:nth-child(randominNumber)",
+    (el) => el.innerHTML
+  );
+  await page.click(choice);
 });
+
 // Acessar um repositório aleatório do seu perfil
 
 // Navega até a aba "Pull Request"
