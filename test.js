@@ -11,11 +11,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  //await browser.close();
+  await browser.close();
 });
-
+// Acessar página www.github.com
 test("Acessar pagina de login do github", async () => {
-  // Acessar página www.github.com
   await page.goto("https://www.github.com");
   await page.goto("https://www.github.com/login");
   await page.type('[name="login"]', process.env.EMAIL);
@@ -37,39 +36,41 @@ test("Verificacao de nome de usuario", async () => {
     '[class="css-truncate css-truncate-target ml-1"]',
     (el) => el.innerHTML
   );
-  expect(name).toBe(process.env.GITHUBUSER);
+  await expect(() => {
+    name.toBe(process.env.GITHUBUSER);
+  }).toThrow();
 });
 
-// Navegar até a aba "Repositories"
+// Navegar até a aba "Repositories" e pull requests
 test("Navegar pelos repositorios", async () => {
-  await page.goto("https://www.github.com/Babifbarbosa/?tab=repositories");
+  await page.goto(`https://www.github.com/Babifbarbosa/?tab=repositories`);
   const repositoriesNumber = await page.$eval(
     '[class="Counter"]',
     (el) => el.innerHTML
   );
-  console.log(repositoriesNumber);
-
-  const links = await page.$$(".wb-break-all > a");
-  console.log(links.length);
-
-  // const repositorioLink = await page.$eval(
-  //   links[Math.floor(Math.random() * repositoriesNumber) ,
-  //   (el) => el.innerHTML
-  // );
-
-  await links[Math.floor(Math.random() * repositoriesNumber)].click();
-  console.log(x);
-  // await page.click('[id="pull-requests-tab"]');
-
-  // Navega até a aba "Pull Request"
-  // const url = page.url();
-  // console.log(url);
-
-  // await page.$eval(
-  //   "#repository-container-header > nav > ul > li:nth-child(3)",
-  //   (el) => el.click()
-  // );
+  const repositorios = await page.$$eval(".wb-break-all > a", (el) =>
+    el.map((element) => element.innerText)
+  );
+  const NumberRandom = Math.floor(Math.random() * repositoriesNumber);
+  const repositorio = repositorios[NumberRandom];
+  await page.goto(`https://www.github.com/Babifbarbosa/${repositorio}`);
+  await page.click("#pull-requests-tab");
+  const url = page.url();
+  await expect(() => {
+    url.toBe(`https://www.github.com/Babifbarbosa/${repositorio}`);
+  }).toThrow();
+  console.log("Navegou ate a pagina de pull");
 });
 
 // Deslogar
-//   await page.click();
+test("Deslogar", async () => {
+  await page.click(
+    "body > div.logged-in.env-production.page-responsive > div.position-relative.js-header-wrapper > header > div.Header-item.position-relative.mr-0.d-none.d-md-flex > details"
+  );
+  // await page.click();
+  // const url = page.url();
+  // await expect(() => {
+  //   url.toBe("https://www.github.com");
+  // }).toThrow();
+  // console.log("Deslogou");
+});
