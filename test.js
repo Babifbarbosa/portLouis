@@ -11,7 +11,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // await browser.close();
+  //await browser.close();
 });
 
 test("Acessar pagina de login do github", async () => {
@@ -47,19 +47,29 @@ test("Navegar pelos repositorios", async () => {
     '[class="Counter"]',
     (el) => el.innerHTML
   );
-  const randomicNumber = (repositoriesNumber) => {
-    return Math.floor(Math.random() * repositoriesNumber + 1);
-  };
-  const choice = await page.$eval(
-    "#user-repositories-list > ul > li:nth-child(randominNumber)",
-    (el) => el.innerHTML
-  );
-  await page.click(choice);
+  console.log(repositoriesNumber);
+
+  const links = await page.$$(".wb-break-all > a");
+  console.log(links.length);
+
+  // const repositorioLink = await page.$eval(
+  //   links[Math.floor(Math.random() * repositoriesNumber) ,
+  //   (el) => el.innerHTML
+  // );
+
+  await links[Math.floor(Math.random() * repositoriesNumber)].click();
+  console.log(x);
+  // await page.click('[id="pull-requests-tab"]');
+
+  // Navega até a aba "Pull Request"
+  // const url = page.url();
+  // console.log(url);
+
+  // await page.$eval(
+  //   "#repository-container-header > nav > ul > li:nth-child(3)",
+  //   (el) => el.click()
+  // );
 });
 
-// Acessar um repositório aleatório do seu perfil
-
-// Navega até a aba "Pull Request"
-// await page.click('a[href="/pulls"]');
 // Deslogar
-//   await page.click("#user");
+//   await page.click();
