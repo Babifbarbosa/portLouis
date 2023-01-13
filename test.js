@@ -5,13 +5,13 @@ let browser, page;
 
 beforeAll(async () => {
   browser = await puppeteer.launch({
-    //headless: false,
+    headless: false,
   });
   page = await browser.newPage();
 });
 
 afterAll(async () => {
-  await browser.close();
+  //await browser.close();
 });
 // Acessar página www.github.com
 test("Acessar pagina de login do github", async () => {
@@ -26,7 +26,7 @@ test("Acessar pagina de login do github", async () => {
   const url = page.url();
   await expect(() => {
     url.toBe("https://github.com/");
-  }).toThrow();
+  }).toThrow("Nao conseguiu se logar");
   console.log("Autenticado");
 });
 
@@ -38,7 +38,7 @@ test("Verificacao de nome de usuario", async () => {
   );
   await expect(() => {
     name.toBe(process.env.GITHUBUSER);
-  }).toThrow();
+  }).toThrow("Nao foi possivel verificar o nome de usuario");
 });
 
 // Navegar até a aba "Repositories" e pull requests
@@ -58,7 +58,7 @@ test("Navegar pelos repositorios", async () => {
   const url = page.url();
   await expect(() => {
     url.toBe(`https://www.github.com/Babifbarbosa/${repositorio}`);
-  }).toThrow();
+  }).toThrow("Nao foi possivel navegar ate as paginas de repositorios e pull ");
   console.log("Navegou ate a pagina de pull");
 });
 
@@ -67,10 +67,13 @@ test("Deslogar", async () => {
   await page.click(
     "body > div.logged-in.env-production.page-responsive > div.position-relative.js-header-wrapper > header > div.Header-item.position-relative.mr-0.d-none.d-md-flex > details"
   );
-  // await page.click();
-  // const url = page.url();
-  // await expect(() => {
-  //   url.toBe("https://www.github.com");
-  // }).toThrow();
-  // console.log("Deslogou");
+  await page.evaluate(() => {
+    document.querySelector('[type="submit"]').click();
+  });
+
+  const url = page.url();
+  await expect(() => {
+    url.toBe("https://github.com");
+  }).toThrow("Nao foi possivel deslogar");
+  console.log("Deslogou");
 });
