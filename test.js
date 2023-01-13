@@ -22,7 +22,6 @@ test("Acessar pagina de login do github", async () => {
   await page.click('[type="submit"]');
   console.log("Login e senha preenchidos e botao clicado");
   await page.waitForNavigation();
-
   const url = page.url();
   await expect(() => {
     url.toBe("https://github.com/");
